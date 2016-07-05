@@ -1,6 +1,7 @@
 package core;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
@@ -15,7 +16,8 @@ public class HTMLEngine {
 	
 	private Map<String, String> cookies;
 	private FileManager fManager;
-	
+	private HashSet<String> keyWords;
+		
 	public HTMLEngine(FileManager fManager) {
 		this.fManager = fManager;
 		try {
@@ -24,6 +26,18 @@ public class HTMLEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void setKeyWords(HashSet<String> keyWords) {
+		this.keyWords = keyWords;
+	}
+	
+	public void removeKeyWord(String keyWord) {
+		this.keyWords.remove(keyWord);
+	}
+	
+	public void addKeyWord(String keyWord) {
+		this.keyWords.add(keyWord);
 	}
 	
 	private void login() throws IOException {
@@ -36,13 +50,24 @@ public class HTMLEngine {
 			.execute().cookies();
 	}
 	
-	public void parseOneForum(int forumID) throws IOException {
+	public void parseForums(String[] forumIDs) throws IOException {
+		for (String forumID : forumIDs) {
+			parseOneForum(forumID);
+		}
+	}
+	
+	public void parseOneForum(String forumID) throws IOException {
 		Document doc = 
 				Jsoup.connect("http://forums.huaren.us/showforum.aspx?forumid=" + forumID).userAgent(USER_AGENT).cookies(cookies).get();
 		// Find all threads on this forum (first page) and parse them
 		Elements titles = doc.getElementById("threadlist").getElementsByClass("subject");
 		for (int i = 0; i < titles.size(); i++) {
-			String oneThread = titles.get(i).getElementsByTag("a").attr("href");
+			Elements link = titles.get(i).getElementsByTag("a");
+			String title = link.get(0).html();
+			if (!threadFilter(title)) {
+				continue;
+			}
+			String oneThread = link.attr("href");
 			parseOneThread(oneThread);
 		}
 	}
@@ -67,6 +92,15 @@ public class HTMLEngine {
 	
 	private String getImageID(String url) {
 		return url.split("\\?")[1];
+	}
+	
+	private boolean threadFilter(String title) {
+		for (String keyWord : keyWords) {
+			if (title.contains(keyWord)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

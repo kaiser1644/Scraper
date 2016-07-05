@@ -4,7 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 public class FileManager {
 	private String imageDir;
 	private HashSet<String> registry;
@@ -31,6 +32,6 @@ public class FileManager {
 	}
 	
 	private String GenerateImageName(String id) {
-		return imageDir + "\\img_" + id;
+		return imageDir + "\\img_" + id + ".jpg";
 	}
 }
