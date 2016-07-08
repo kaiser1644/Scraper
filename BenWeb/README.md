@@ -1,0 +1,1 @@
+A simple image scraper.

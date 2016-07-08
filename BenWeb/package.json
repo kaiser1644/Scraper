@@ -1,21 +1,24 @@
 {
   "name": "scraper",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple image scraper.",
   "main": "main.js",
   "dependencies": {
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
     "cheerio": "^0.20.0",
     "express": "^4.14.0",
     "react": "^15.2.0",
+    "react-bootstrap": "^0.29.5",
     "react-dom": "^15.2.0",
     "request": "^2.72.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel client/app -d client/public"
   },
   "author": "kaiser1644",
   "license": "ISC",
