@@ -1,18 +1,19 @@
 "use strict";
 
+// Libraries
+
 var React = require("react");
 var Rb = require("react-bootstrap");
 
 // React-bootstrap components
 var PageHeader = Rb.PageHeader;
-var FormGroup = Rb.FormGroup;
-var FormControl = Rb.FormControl;
-var HelpBlock = Rb.HelpBlock;
-var ControlLabel = Rb.ControlLabel;
 var Button = Rb.Button;
-var Navbar = Rb.Navbar;
-var Nav = Rb.Nav;
-var MenuItem = Rb.MenuItem;
+
+// Form components
+var Forums = require("./forums");
+var Keywords = require("./keywords");
+var File = require("./file");
+var Login = require("./login");
 
 module.exports = React.createClass({
 	displayName: "exports",
@@ -29,7 +30,8 @@ module.exports = React.createClass({
 					null,
 					"Ben"
 				),
-				React.createElement("link", { rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" })
+				React.createElement("link", { rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" }),
+				React.createElement("link", { rel: "stylesheet", href: "css/style.css" })
 			),
 			React.createElement(
 				"body",
@@ -38,42 +40,26 @@ module.exports = React.createClass({
 					"div",
 					{ className: "container" },
 					React.createElement(
-						Navbar,
+						PageHeader,
 						null,
+						"Ben ",
 						React.createElement(
-							Navbar.Header,
+							"small",
 							null,
-							React.createElement(
-								Navbar.Brand,
-								null,
-								"Ben"
-							),
-							React.createElement(Navbar.Toggle, null)
-						),
-						React.createElement(Navbar.Collapse, null)
+							"Never miss a ben again."
+						)
 					),
 					React.createElement(
 						"form",
 						null,
-						React.createElement(
-							FormGroup,
-							{ controlId: "formControlsFile" },
-							React.createElement(
-								ControlLabel,
-								null,
-								"File"
-							),
-							React.createElement(FormControl, { type: "file" }),
-							React.createElement(
-								HelpBlock,
-								null,
-								"Example block-level help text here."
-							)
-						),
+						React.createElement(Forums, null),
+						React.createElement(Keywords, null),
+						React.createElement(File, null),
+						React.createElement(Login, null),
 						React.createElement(
 							Button,
-							{ type: "submit" },
-							"Start"
+							{ type: "submit", className: "start" },
+							"Start!"
 						)
 					)
 				)

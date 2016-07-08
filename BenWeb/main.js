@@ -5,13 +5,17 @@ var request = require("request");
 var cheerio = require("cheerio");
 var ReactDOMServer = require("react-dom/server");
 var React = require("react");
+var Path = require("path");
 
 // constants
 var BASE_URL = "http://forums.huaren.us";
 
 var app = express();
-
 var Home = React.createFactory(require("./client/public/index"));
+
+// serve css
+app.use("/css",express.static(Path.join(__dirname, "client/public/css")));
+
 app.get("/", function (req, res) {
 	res.send(ReactDOMServer.renderToStaticMarkup(Home({})));
 });

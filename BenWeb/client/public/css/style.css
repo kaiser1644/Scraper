@@ -1,0 +1,21 @@
+.longInput
+{
+	max-width: 400px;
+}
+
+.shortInput
+{
+	display: inline;
+	max-width: 200px;
+	margin-right:10px;
+}
+
+.container
+{
+	max-width:800px;
+}
+
+.start
+{
+	float:right;
+}
