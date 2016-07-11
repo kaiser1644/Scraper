@@ -9,7 +9,7 @@ module.exports = React.createClass({
 	render: function () {
 		return (
 			<FormGroup>
-				<ControlLabel>2.　Enter keywords:</ControlLabel>
+				<ControlLabel>2. Enter keywords:</ControlLabel>
 				<FormControl className="longInput"></FormControl>
 			</FormGroup>
 		);

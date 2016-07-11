@@ -13,11 +13,13 @@ var BASE_URL = "http://forums.huaren.us";
 var app = express();
 var Home = React.createFactory(require("./client/public/index"));
 
-// serve css
-app.use("/css",express.static(Path.join(__dirname, "client/public/css")));
+// serve public files
+app.use(express.static(Path.join(__dirname, "client/public")));
+app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-	res.send(ReactDOMServer.renderToStaticMarkup(Home({})));
+	var reactHTML = ReactDOMServer.renderToString(Home({}));
+	res.render("index", { content: reactHTML });
 });
 
 app.get("/scrape", function (req, res) {

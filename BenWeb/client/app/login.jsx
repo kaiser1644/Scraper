@@ -11,7 +11,7 @@ module.exports = React.createClass({
 	render: function () {
 		return (
 			<FormGroup>
-				<ControlLabel>3.　Enter your login information:</ControlLabel>
+				<ControlLabel>3. Enter your login information:</ControlLabel>
 				<Alert>
 					We NEVER save your login information or use it for purposes other than Ben.
 				</Alert>

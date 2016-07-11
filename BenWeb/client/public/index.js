@@ -3,6 +3,7 @@
 // Libraries
 
 var React = require("react");
+var ReactDOM = require("react-dom");
 var Rb = require("react-bootstrap");
 
 // React-bootstrap components
@@ -12,58 +13,47 @@ var Button = Rb.Button;
 // Form components
 var Forums = require("./forums");
 var Keywords = require("./keywords");
-var File = require("./file");
 var Login = require("./login");
 
-module.exports = React.createClass({
-	displayName: "exports",
+var Index = React.createClass({
+	displayName: "Index",
+
+	run: function run() {
+		alert("run");
+	},
 
 	render: function render() {
 		return React.createElement(
-			"html",
+			"div",
 			null,
 			React.createElement(
-				"head",
+				PageHeader,
 				null,
+				"Ben ",
 				React.createElement(
-					"title",
+					"small",
 					null,
-					"Ben"
-				),
-				React.createElement("link", { rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" }),
-				React.createElement("link", { rel: "stylesheet", href: "css/style.css" })
+					"Never miss a ben again."
+				)
 			),
 			React.createElement(
-				"body",
+				"form",
 				null,
+				React.createElement(Forums, null),
+				React.createElement(Keywords, null),
+				React.createElement(Login, null),
 				React.createElement(
-					"div",
-					{ className: "container" },
-					React.createElement(
-						PageHeader,
-						null,
-						"Ben ",
-						React.createElement(
-							"small",
-							null,
-							"Never miss a ben again."
-						)
-					),
-					React.createElement(
-						"form",
-						null,
-						React.createElement(Forums, null),
-						React.createElement(Keywords, null),
-						React.createElement(File, null),
-						React.createElement(Login, null),
-						React.createElement(
-							Button,
-							{ type: "submit", className: "start" },
-							"Start!"
-						)
-					)
+					Button,
+					{ className: "start", onClick: this.run },
+					"Start!"
 				)
 			)
 		);
 	}
 });
+
+if (typeof window !== 'undefined') {
+	ReactDOM.render(React.createElement(Index, null), document.getElementById("divContainer"));
+}
+
+module.exports = Index;

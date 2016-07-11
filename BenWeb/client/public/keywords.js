@@ -17,7 +17,7 @@ module.exports = React.createClass({
 			React.createElement(
 				ControlLabel,
 				null,
-				"2.　Enter keywords:"
+				"2. Enter keywords:"
 			),
 			React.createElement(FormControl, { className: "longInput" })
 		);

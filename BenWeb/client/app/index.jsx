@@ -1,6 +1,7 @@
 // Libraries
 
 var React = require("react");
+var ReactDOM = require("react-dom");
 var Rb = require("react-bootstrap");
 
 // React-bootstrap components
@@ -12,34 +13,32 @@ var Forums = require("./forums");
 var Keywords = require("./keywords");
 var Login = require("./login");
 
-module.exports = React.createClass({
+var Index = React.createClass({
 	run: function () {
-		
+		alert("run");
 	},
 
 	render: function() {
 		return (
-			<html>
-				<head>
-					<title>Ben</title>
-					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
-					<link rel="stylesheet" href="css/style.css" />
-				</head>
-				<body>
-					<div className="container">
-					<PageHeader>Ben <small>Never miss a ben again.</small></PageHeader>
-					<form>
-						<Forums></Forums>
-						<Keywords></Keywords>
-						<Login></Login>
-						<Button className="start" onclick={this.run}>
-							Start!
-						</Button>
-					</form>
-					
-					</div>
-				</body>
-			</html>
-    );
-  }
+			<div>
+				<PageHeader>Ben <small>Never miss a ben again.</small></PageHeader>
+				<form>
+					<Forums></Forums>
+					<Keywords></Keywords>
+					<Login></Login>
+					<Button className="start" onClick={this.run}>
+						Start!
+					</Button>
+				</form>
+			</div>
+		);
+	}
 });
+
+if(typeof window !== 'undefined') {
+    ReactDOM.render(<Index />, document.getElementById("divContainer"));
+}
+
+
+
+module.exports = Index;

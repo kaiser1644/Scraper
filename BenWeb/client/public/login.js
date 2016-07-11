@@ -19,7 +19,7 @@ module.exports = React.createClass({
 			React.createElement(
 				ControlLabel,
 				null,
-				"4.　Enter your login information:"
+				"3. Enter your login information:"
 			),
 			React.createElement(
 				Alert,
