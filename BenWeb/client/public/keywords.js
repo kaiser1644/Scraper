@@ -11,6 +11,8 @@ module.exports = React.createClass({
 	displayName: "exports",
 
 	render: function render() {
+		var onChange = this.props.onChange;
+		var data = this.props.data;
 		return React.createElement(
 			FormGroup,
 			null,
@@ -19,7 +21,7 @@ module.exports = React.createClass({
 				null,
 				"2. Enter keywords:"
 			),
-			React.createElement(FormControl, { className: "longInput" })
+			React.createElement(FormControl, { className: "longInput", onChange: onChange, value: data })
 		);
 	}
 });

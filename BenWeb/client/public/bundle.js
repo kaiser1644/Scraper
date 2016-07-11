@@ -132,23 +132,9 @@ var ControlLabel = Rb.ControlLabel;
 module.exports = React.createClass({
 	displayName: "exports",
 
-	getInitialState: function getInitialState() {
-		return { selectedForums: [] };
-	},
-
-	handleForumChange: function handleForumChange(e) {
-		var cb = e.target;
-		var id = cb.value;
-		var selectedForums = this.state.selectedForums.slice();;
-		if (cb.checked) {
-			selectedForums.push(id);
-		} else {
-			selectedForums.splice(selectedForums.indexOf(id), 1);
-		}
-		this.setState({ selectedForums: selectedForums });
-	},
-
 	render: function render() {
+		var data = this.props.data;
+		var onChange = this.props.onChange;
 		return React.createElement(
 			FormGroup,
 			null,
@@ -158,31 +144,20 @@ module.exports = React.createClass({
 				"1. Choose forums:"
 			),
 			React.createElement("br", null),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "398" },
-				"Chats"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "225" },
-				"Fashion"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "341" },
-				"Fitness"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "347" },
-				"Beauty"
-			)
+			data.map(function (oneForum) {
+				return React.createElement(
+					Checkbox,
+					{ inline: true, onChange: onChange, key: oneForum.key, value: oneForum.key, checked: oneForum.checked },
+					oneForum.text
+				);
+			})
 		);
 	}
 });
 },{"react":438,"react-bootstrap":97}],3:[function(require,module,exports){
 "use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 // Libraries
 
@@ -202,8 +177,100 @@ var Login = require("./login");
 var Index = React.createClass({
 	displayName: "Index",
 
+	getInitialState: function getInitialState() {
+		return {
+			forums: [{ key: "398", text: "Chats", checked: false }, { key: "225", text: "Fashion", checked: false }, { key: "341", text: "Fitness", checked: false }, { key: "347", text: "Beauty", checked: false }],
+			keywords: "",
+			login: {
+				isGuest: false,
+				username: "",
+				password: ""
+			}
+		};
+	},
+
+	updateForums: function updateForums(e) {
+		var cb = e.target;
+		var id = cb.value;
+		var forums = this.state.forums.slice();
+
+		// Find corresponding forum
+		for (var i = 0; i < forums.length; i++) {
+			if (forums[i].key === id) {
+				forums[i].checked = cb.checked;
+			}
+		}
+
+		this.setState({ forums: forums });
+	},
+
+	updateKeywords: function updateKeywords(e) {
+		this.setState({ keywords: e.target.value });
+	},
+
+	updateUsername: function updateUsername(e) {
+		var text = e.target.value;
+		this.setState({ login: _extends({}, this.state.login, { username: text }) });
+	},
+
+	updatePassword: function updatePassword(e) {
+		var text = e.target.value;
+		this.setState({ login: _extends({}, this.state.login, { password: text }) });
+	},
+
+	updateGuest: function updateGuest(e) {
+		this.setState({ login: _extends({}, this.state.login, { isGuest: e.target.checked }) });
+	},
+
 	run: function run() {
-		alert("run");
+		//alert("run");
+		// Preprocess request data
+		var data = {};
+		data.forums = [];
+		// forums
+		for (var i = 0; i < this.state.forums.length; i++) {
+			if (this.state.forums[i].checked) {
+				data.forums.push(this.state.forums[i].key);
+			}
+		}
+
+		if (data.forums.length === 0) {
+			//TODO error message
+			return;
+		}
+
+		// keywords
+		if (this.state.keywords.length === 0) {
+			//TODO error message
+			return;
+		}
+
+		data.keywords = this.state.keywords.split(" ");
+
+		// login
+		if (this.state.login.isGuest) {
+			data.isGuest = true;
+		} else {
+			data.isGuest = false;
+			data.username = this.state.login.username;
+			data.password = this.state.login.password;
+		}
+
+		// Call web service
+		$.ajax({
+			url: "/scrape",
+			type: "GET",
+			dataType: "html",
+			data: data,
+			success: function success(data) {
+				// Rendered on server side so replace the entire page with response
+				document.write(data);
+				document.close();
+			},
+			error: function error(xhr, status, err) {
+				console.error("/scrape", status, err.toString());
+			}
+		});
 	},
 
 	render: function render() {
@@ -223,9 +290,9 @@ var Index = React.createClass({
 			React.createElement(
 				"form",
 				null,
-				React.createElement(Forums, null),
-				React.createElement(Keywords, null),
-				React.createElement(Login, null),
+				React.createElement(Forums, { data: this.state.forums, onChange: this.updateForums }),
+				React.createElement(Keywords, { data: this.state.keywords, onChange: this.updateKeywords }),
+				React.createElement(Login, { data: this.state.login, updateUsername: this.updateUsername, updatePassword: this.updatePassword, updateGuest: this.updateGuest }),
 				React.createElement(
 					Button,
 					{ className: "start", onClick: this.run },
@@ -255,6 +322,8 @@ module.exports = React.createClass({
 	displayName: "exports",
 
 	render: function render() {
+		var onChange = this.props.onChange;
+		var data = this.props.data;
 		return React.createElement(
 			FormGroup,
 			null,
@@ -263,7 +332,7 @@ module.exports = React.createClass({
 				null,
 				"2. Enter keywords:"
 			),
-			React.createElement(FormControl, { className: "longInput" })
+			React.createElement(FormControl, { className: "longInput", onChange: onChange, value: data })
 		);
 	}
 });
@@ -282,22 +351,17 @@ var Alert = Rb.Alert;
 module.exports = React.createClass({
 	displayName: "exports",
 
-	getInitialState: function getInitialState() {
-		return {
-			isGuest: false,
-			username: "",
-			password: ""
-		};
-	},
-
 	handleGuestChange: function handleGuestChange(e) {
 		var cb = e.target;
 		document.getElementById("txtUserName").disabled = cb.checked;
 		document.getElementById("txtPassword").disabled = cb.checked;
-		this.setState({ isGuest: cb.checked });
+		this.props.updateGuest(e);
 	},
 
 	render: function render() {
+		var data = this.props.data;
+		var updateUsername = this.props.updateUsername;
+		var updatePassword = this.props.updatePassword;
 		return React.createElement(
 			FormGroup,
 			null,
@@ -311,11 +375,11 @@ module.exports = React.createClass({
 				null,
 				"We NEVER save your login information or use it for purposes other than Ben."
 			),
-			React.createElement(FormControl, { className: "shortInput", placeholder: "User Name", id: "txtUserName" }),
-			React.createElement(FormControl, { type: "password", className: "shortInput", placeholder: "Password", id: "txtPassword" }),
+			React.createElement(FormControl, { className: "shortInput", placeholder: "User Name", id: "txtUserName", onChange: updateUsername, value: data.username }),
+			React.createElement(FormControl, { type: "password", className: "shortInput", placeholder: "Password", id: "txtPassword", onChange: updatePassword, value: data.password }),
 			React.createElement(
 				Checkbox,
-				{ inline: true, onChange: this.handleGuestChange },
+				{ inline: true, onChange: this.handleGuestChange, checked: data.isGuest },
 				"Log in as guest"
 			)
 		);

@@ -10,23 +10,9 @@ var ControlLabel = Rb.ControlLabel;
 module.exports = React.createClass({
 	displayName: "exports",
 
-	getInitialState: function getInitialState() {
-		return { selectedForums: [] };
-	},
-
-	handleForumChange: function handleForumChange(e) {
-		var cb = e.target;
-		var id = cb.value;
-		var selectedForums = this.state.selectedForums.slice();;
-		if (cb.checked) {
-			selectedForums.push(id);
-		} else {
-			selectedForums.splice(selectedForums.indexOf(id), 1);
-		}
-		this.setState({ selectedForums: selectedForums });
-	},
-
 	render: function render() {
+		var data = this.props.data;
+		var onChange = this.props.onChange;
 		return React.createElement(
 			FormGroup,
 			null,
@@ -36,26 +22,13 @@ module.exports = React.createClass({
 				"1. Choose forums:"
 			),
 			React.createElement("br", null),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "398" },
-				"Chats"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "225" },
-				"Fashion"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "341" },
-				"Fitness"
-			),
-			React.createElement(
-				Checkbox,
-				{ inline: true, onChange: this.handleForumChange, value: "347" },
-				"Beauty"
-			)
+			data.map(function (oneForum) {
+				return React.createElement(
+					Checkbox,
+					{ inline: true, onChange: onChange, key: oneForum.key, value: oneForum.key, checked: oneForum.checked },
+					oneForum.text
+				);
+			})
 		);
 	}
 });
