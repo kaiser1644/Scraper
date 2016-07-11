@@ -1,6 +1,11 @@
-A simple image scraper.
+<h1>A simple image scraper.</h1>
 
-Global install to compile jsx and bundle js:
-
-babel CLI
-browserify
+<ol>
+<li>
+Globally install these with npm to compile jsx and bundle js:
+<ul>
+<li>babel CLI</li>
+<li>browserify</li>
+</ul>
+</li>
+</ol>
