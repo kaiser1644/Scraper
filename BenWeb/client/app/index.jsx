@@ -12,6 +12,7 @@ var Button = Rb.Button;
 var Forums = require("./forums");
 var Keywords = require("./keywords");
 var Login = require("./login");
+var Result = require("./result");
 
 var Index = React.createClass({
 	getInitialState: function() {
@@ -27,7 +28,8 @@ var Index = React.createClass({
 				isGuest: false,
 				username: "",
 				password: ""
-			}
+			},
+			result: []
 		};
 	},
 	
@@ -99,17 +101,19 @@ var Index = React.createClass({
 			data.password = this.state.login.password;
 		}
 		
+		// show spin icon
+		$("#iSpin").attr("style", "display:inline-block!important");
+		
 		// Call web service
 		$.ajax({
 			url: "/scrape",
 			type: "GET",
-			dataType: "html",
+			dataType: "json",
 			data: data,
-			success: function(data) {
-				// Rendered on server side so replace the entire page with response
-				document.write(data);
-				document.close();
-			},
+			success: $.proxy(function(data) {
+				$("#iSpin").attr("style", "display:none!important");
+				this.setState({ result: data });
+			}, this),
 			error: function(xhr, status, err) {
 				console.error("/scrape", status, err.toString());
 			}
@@ -119,14 +123,16 @@ var Index = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<PageHeader>Ben <small>Never miss a ben again.</small></PageHeader>
+				<PageHeader>Ben <small>never miss a ben again.</small></PageHeader>
 				<form>
 					<Forums data={this.state.forums} onChange={this.updateForums}></Forums>
 					<Keywords data={this.state.keywords} onChange={this.updateKeywords}></Keywords>
 					<Login data={this.state.login} updateUsername={this.updateUsername} updatePassword={this.updatePassword} updateGuest={this.updateGuest}></Login>
 					<Button className="start" onClick={this.run}>
 						Start!
+						<i className="fa fa-circle-o-notch fa-spin spin" id="iSpin"></i>
 					</Button>
+					<Result data={this.state.result}></Result>
 				</form>
 			</div>
 		);

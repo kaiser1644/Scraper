@@ -17,5 +17,17 @@
 
 .start
 {
-	float:right;
+	width:100%;
+	margin-bottom:50px;
+}
+
+.grid-item 
+{ 
+	width: 33%; 
+}
+
+.spin
+{
+	display:none!important;
+	margin-left:5px;
 }

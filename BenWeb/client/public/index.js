@@ -16,6 +16,7 @@ var Button = Rb.Button;
 var Forums = require("./forums");
 var Keywords = require("./keywords");
 var Login = require("./login");
+var Result = require("./result");
 
 var Index = React.createClass({
 	displayName: "Index",
@@ -28,7 +29,8 @@ var Index = React.createClass({
 				isGuest: false,
 				username: "",
 				password: ""
-			}
+			},
+			result: []
 		};
 	},
 
@@ -99,17 +101,19 @@ var Index = React.createClass({
 			data.password = this.state.login.password;
 		}
 
+		// show spin icon
+		$("#iSpin").attr("style", "display:inline-block!important");
+
 		// Call web service
 		$.ajax({
 			url: "/scrape",
 			type: "GET",
-			dataType: "html",
+			dataType: "json",
 			data: data,
-			success: function success(data) {
-				// Rendered on server side so replace the entire page with response
-				document.write(data);
-				document.close();
-			},
+			success: $.proxy(function (data) {
+				$("#iSpin").attr("style", "display:none!important");
+				this.setState({ result: data });
+			}, this),
 			error: function error(xhr, status, err) {
 				console.error("/scrape", status, err.toString());
 			}
@@ -127,7 +131,7 @@ var Index = React.createClass({
 				React.createElement(
 					"small",
 					null,
-					"Never miss a ben again."
+					"never miss a ben again."
 				)
 			),
 			React.createElement(
@@ -139,8 +143,10 @@ var Index = React.createClass({
 				React.createElement(
 					Button,
 					{ className: "start", onClick: this.run },
-					"Start!"
-				)
+					"Start!",
+					React.createElement("i", { className: "fa fa-circle-o-notch fa-spin spin", id: "iSpin" })
+				),
+				React.createElement(Result, { data: this.state.result })
 			)
 		);
 	}

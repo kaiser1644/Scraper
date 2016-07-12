@@ -13,7 +13,6 @@ var BASE_URL = "http://forums.huaren.us";
 
 var app = express();
 var Home = React.createFactory(require("./client/public/index"));
-var Result = React.createFactory(require("./client/public/result"));
 
 // serve public files
 app.use(express.static(Path.join(__dirname, "client/public")));
@@ -54,10 +53,9 @@ app.get("/scrape", function (req, res) {
 				$("div[id^=message] img[src^='/attachment']").each(function (index, element) {
 					result.push(base_url + $(element).attr("src"));
 				});
-				if (completedRequests++ === requestCount) {
+				completedRequests = completedRequests + 1;
+				if (completedRequests === requestCount) {
 					res.send(result);
-					//var reactHTML = ReactDOMServer.renderToString(Result({ props: { data: result } }));
-					//res.render("template", { content: reactHTML });
 				}
 			}
 		});
